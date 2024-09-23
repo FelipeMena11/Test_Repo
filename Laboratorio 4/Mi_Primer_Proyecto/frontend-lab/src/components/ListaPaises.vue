@@ -1,6 +1,16 @@
 <template>
   <div class="container mt-5">
     <h1 class="display-4 text-center">Lista de países</h1>
+    <div class="row justify-content-end">
+      <div class="col-2">
+        <a href="/pais">
+          <button type="button" class="btn
+            btn-outline-secondary float-right">
+          Agregar país
+        </button>
+        </a>
+      </div>
+    </div>
     <table
     class="table is-bordered is-striped is-narrow is-hoverable
     is-fullwidth"
@@ -19,7 +29,7 @@
         <td>{{pais.continente}}</td>
         <td>{{pais.Idioma}}</td>
         <td>
-          <button class="btn btn-secondary btn-sm" v-on:click="editar(index)">Editar</button>
+          <button class="btn btn-secondary btn-sm">Editar</button>
           <button class="btn btn-danger btn-sm" v-on:click="eliminar(index)">Eliminar</button>
         </td>
       </tr>
@@ -30,6 +40,7 @@
 </template>
 
 <script>
+import axios from "axios";
   export default {
     name: "ListaPaises",
     data() {
@@ -44,13 +55,22 @@
       };
     },
     methods: {
-      editar() {
-        
-      },
       eliminar(index) {
+        /* Elimina el pais con splice, el cual comienza desde index y elimina la
+        cantidad de elementos especificada en el segundo parámetro */
         this.paises.splice(index, 1);
-      }
-    }
+      },
+      obtenerTareas() {
+        axios.get("https://localhost:7114/api/Paises").then(
+        (response) => {
+          console.log(response.data);
+          this.paises = response.data;
+        });
+      }  
+    },
+    created: function() {
+      this.obtenerTareas();
+    },
   }
 </script>
 
